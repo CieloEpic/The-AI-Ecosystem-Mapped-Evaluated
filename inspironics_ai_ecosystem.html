@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Ecosystem — Inspironics Corporation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0a0e1a;--navy2:#111827;--card:#161d2e;--card2:#1e2840;
+  --border:rgba(99,130,255,0.18);--border2:rgba(99,130,255,0.35);
+  --accent:#6382ff;--accent2:#00d4aa;--accent3:#ff6b9d;--accent4:#ffb347;
+  --text:#e8ecff;--muted:#8896bb;--green:#22c87a;--red:#ff5c5c;
+}
+body{background:var(--navy);font-family:'DM Sans',sans-serif;color:var(--text);min-height:100vh}
+.top-nav{background:var(--navy2);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;height:48px;position:sticky;top:0;z-index:100;overflow-x:auto}
+.nav-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{padding:8px 14px;border-radius:6px 6px 0 0;font-size:12px;font-weight:500;cursor:pointer;color:var(--muted);border:1px solid transparent;border-bottom:none;white-space:nowrap;transition:all .2s;background:transparent}
+.nav-tab:hover{color:var(--text);background:rgba(99,130,255,.08)}
+.nav-tab.active{color:var(--accent);background:var(--navy);border-color:var(--border)}
+.logo-badge{margin-left:auto;background:linear-gradient(135deg,#6382ff,#00d4aa);padding:4px 12px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px;color:#fff;white-space:nowrap;flex-shrink:0}
+.slide{display:none;padding:28px 28px 40px;animation:fadeIn .3s ease}
+.slide.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.hero-header{text-align:center;margin-bottom:32px}
+.hero-eyebrow{font-size:11px;letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:8px}
+.hero-title{font-size:32px;font-weight:300;line-height:1.2;color:var(--text)}
+.hero-title strong{font-weight:600;color:var(--accent)}
+.hero-sub{font-size:14px;color:var(--muted);margin-top:8px}
+.eco-map{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
+.eco-lane{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.eco-lane-title{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:8px}
+.ai-node{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:all .2s;margin-bottom:6px;border:1px solid transparent}
+.ai-node:hover{background:rgba(99,130,255,.1);border-color:var(--border2)}
+.ai-node.active{background:rgba(99,130,255,.15);border-color:var(--accent)}
+.ai-dot{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;font-weight:700}
+.ai-info{flex:1;min-width:0}
+.ai-name{font-size:13px;font-weight:500;color:var(--text)}
+.ai-maker{font-size:11px;color:var(--muted)}
+.tier-badge{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600;white-space:nowrap}
+.tier-S{background:rgba(99,130,255,.2);color:#a0b4ff}
+.tier-A{background:rgba(0,212,170,.15);color:#00d4aa}
+.tier-B{background:rgba(255,179,71,.15);color:#ffb347}
+.detail-panel{background:var(--card2);border:1px solid var(--border2);border-radius:12px;padding:20px;margin-top:4px}
+.detail-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
+.detail-icon{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;font-weight:700}
+.detail-meta h2{font-size:20px;font-weight:600}
+.detail-meta p{font-size:13px;color:var(--muted);margin-top:3px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+.detail-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px}
+.detail-card-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.detail-card-val{font-size:13px;color:var(--text);line-height:1.5}
+.tag-list{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+.tag{font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(99,130,255,.12);color:#a0b4ff;border:1px solid rgba(99,130,255,.2)}
+.comp-table{width:100%;border-collapse:collapse;font-size:12px}
+.comp-table th{background:var(--card2);color:var(--muted);font-size:10px;letter-spacing:.8px;text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;position:sticky;top:48px}
+.comp-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+.comp-table tr:hover td{background:rgba(99,130,255,.04)}
+.score-bar{display:flex;align-items:center;gap:6px}
+.score-fill{height:5px;border-radius:3px;background:var(--accent)}
+.score-num{font-size:11px;color:var(--muted);min-width:24px}
+.inv-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.inv-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.inv-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.inv-logo{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+.inv-ai-name{font-size:14px;font-weight:600}
+.inv-valuation{font-size:12px;color:var(--accent2);font-weight:600}
+.inv-body{padding:12px 14px}
+.inv-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.inv-label{font-size:11px;color:var(--muted)}
+.inv-val{font-size:12px;color:var(--text);font-weight:500;text-align:right;max-width:65%}
+.funding-bar{height:4px;border-radius:2px;margin-top:8px;background:var(--border);overflow:hidden}
+.funding-fill{height:100%;border-radius:2px}
+.roadmap-track{margin-bottom:20px}
+.roadmap-ai-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.roadmap-timeline{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.roadmap-node{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;min-width:150px;flex-shrink:0}
+.rm-date{font-size:10px;color:var(--accent2);font-weight:600;margin-bottom:4px}
+.rm-event{font-size:11px;color:var(--text);line-height:1.4}
+.rm-node-past{border-color:rgba(34,200,122,.3);background:rgba(34,200,122,.06)}
+.rm-node-current{border-color:var(--accent);background:rgba(99,130,255,.1)}
+.rm-node-future{border-color:rgba(255,179,71,.2);background:rgba(255,179,71,.05)}
+.int-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.int-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
+.int-ai-name{font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.int-apps{display:flex;flex-wrap:wrap;gap:5px}
+.int-app{font-size:10px;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--muted)}
+.int-app.native{background:rgba(0,212,170,.1);border-color:rgba(0,212,170,.25);color:#00d4aa}
+.int-app.key{background:rgba(99,130,255,.12);border-color:rgba(99,130,255,.3);color:#a0b4ff}
+.rec-matrix{display:grid;grid-template-columns:185px 1fr;gap:16px}
+.rec-sidebar{display:flex;flex-direction:column;gap:6px}
+.rec-dept-btn{padding:8px 12px;border-radius:7px;font-size:12px;cursor:pointer;transition:all .2s;border:1px solid var(--border);color:var(--muted);background:var(--card)}
+.rec-dept-btn:hover{color:var(--text);border-color:var(--border2)}
+.rec-dept-btn.active{color:var(--accent);border-color:var(--accent);background:rgba(99,130,255,.1)}
+.rec-main-panel{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px}
+.rmp-header{font-size:18px;font-weight:600;margin-bottom:4px}
+.rmp-sub{font-size:13px;color:var(--muted);margin-bottom:16px}
+.rmp-tool{display:flex;align-items:flex-start;gap:12px;padding:10px;border-radius:8px;margin-bottom:8px;background:var(--card2);border:1px solid var(--border)}
+.rmp-rank-badge{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.rank-1{background:rgba(255,179,71,.3);color:#ffb347}
+.rank-2{background:rgba(99,130,255,.2);color:#a0b4ff}
+.rank-3{background:rgba(0,212,170,.15);color:#00d4aa}
+.rmp-tool-info h4{font-size:13px;font-weight:600;margin-bottom:3px}
+.rmp-tool-info p{font-size:11px;color:var(--muted);line-height:1.5}
+.rmp-use-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.slide-header{margin-bottom:24px}
+.slide-header h1{font-size:22px;font-weight:600}
+.slide-header p{font-size:13px;color:var(--muted);margin-top:4px}
+.section-divider{height:1px;background:var(--border);margin:20px 0}
+.scroll-area{max-height:520px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.pres-footer{background:var(--navy2);border-top:1px solid var(--border);padding:10px 28px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted);position:sticky;bottom:0}
+.slide-counter{display:flex;gap:4px;align-items:center}
+.dot-nav{width:6px;height:6px;border-radius:50%;background:var(--border2);cursor:pointer;transition:all .2s}
+.dot-nav.active{background:var(--accent);width:16px;border-radius:3px}
+.nav-arrow{background:var(--card);border:1px solid var(--border);color:var(--text);padding:4px 12px;border-radius:5px;cursor:pointer;font-size:13px;transition:all .2s}
+.nav-arrow:hover{background:var(--card2);border-color:var(--border2)}
+@media(max-width:768px){.eco-map,.inv-grid,.int-grid{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr 1fr}.rec-matrix{grid-template-columns:1fr}.dept-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="app">
+<div class="top-nav">
+  <div class="nav-tabs" id="navTabs">
+    <div class="nav-tab active" onclick="goSlide(0)">🗺 Ecosystem Map</div>
+    <div class="nav-tab" onclick="goSlide(1)">⚖ Comparison</div>
+    <div class="nav-tab" onclick="goSlide(2)">💰 Investments</div>
+    <div class="nav-tab" onclick="goSlide(3)">🛣 Roadmap</div>
+    <div class="nav-tab" onclick="goSlide(4)">🔗 Integrations</div>
+    <div class="nav-tab" onclick="goSlide(5)">🏢 For Inspironics</div>
+  </div>
+  <div class="logo-badge">INSPIRONICS</div>
+</div>
+
+<!-- SLIDE 0: ECOSYSTEM MAP -->
+<div class="slide active" id="slide-0">
+  <div class="hero-header">
+    <div class="hero-eyebrow">Inspironics Corporation · AI Intelligence Report 2025–26</div>
+    <div class="hero-title">The <strong>AI Ecosystem</strong> — Mapped &amp; Evaluated</div>
+    <div class="hero-sub">Click any platform to explore capabilities, pricing, and fit for Inspironics</div>
+  </div>
+  <div class="eco-map">
+    <div class="eco-lane">
+      <div class="eco-lane-title">⚡ Foundation AI Models</div>
+      <div class="ai-node active" onclick="showDetail('claude')" id="node-claude">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#6382ff,#9b59b6)">A</div>
+        <div class="ai-info"><div class="ai-name">Claude (Opus/Sonnet)</div><div class="ai-maker">Anthropic</div></div>
+        <span class="tier-badge tier-S">S</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('gpt')" id="node-gpt">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#10a37f,#0d7a60)">O</div>
+        <div class="ai-info"><div class="ai-name">GPT-4o / o3</div><div class="ai-maker">OpenAI</div></div>
+        <span class="tier-badge tier-S">S</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('gemini')" id="node-gemini">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#4285f4,#34a853)">G</div>
+        <div class="ai-info"><div class="ai-name">Gemini 2.0 / Ultra</div><div class="ai-maker">Google DeepMind</div></div>
+        <span class="tier-badge tier-S">S</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('grok')" id="node-grok">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#1da1f2,#0c7abf)">X</div>
+        <div class="ai-info"><div class="ai-name">Grok 3 / Aurora</div><div class="ai-maker">xAI (Elon Musk)</div></div>
+        <span class="tier-badge tier-A">A</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('llama')" id="node-llama">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#0866ff,#1877f2)">M</div>
+        <div class="ai-info"><div class="ai-name">Llama 4 Scout/Maverick</div><div class="ai-maker">Meta AI</div></div>
+        <span class="tier-badge tier-A">A</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('mistral')" id="node-mistral">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#f04e30,#c0392b)">Mi</div>
+        <div class="ai-info"><div class="ai-name">Mistral Large 2</div><div class="ai-maker">Mistral AI</div></div>
+        <span class="tier-badge tier-B">B</span>
+      </div>
+    </div>
+    <div class="eco-lane">
+      <div class="eco-lane-title">🤖 AI Assistants &amp; Copilots</div>
+      <div class="ai-node" onclick="showDetail('copilot')" id="node-copilot">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#0078d4,#50b5ff)">Co</div>
+        <div class="ai-info"><div class="ai-name">Microsoft Copilot 365</div><div class="ai-maker">Microsoft / OpenAI</div></div>
+        <span class="tier-badge tier-S">S</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('github')" id="node-github">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#24292e,#444)">GH</div>
+        <div class="ai-info"><div class="ai-name">GitHub Copilot</div><div class="ai-maker">Microsoft / OpenAI</div></div>
+        <span class="tier-badge tier-S">S</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('perplexity')" id="node-perplexity">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#20b2aa,#008b8b)">Px</div>
+        <div class="ai-info"><div class="ai-name">Perplexity AI Pro</div><div class="ai-maker">Perplexity AI</div></div>
+        <span class="tier-badge tier-A">A</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('antigravity')" id="node-antigravity">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#8e44ad,#6c3483)">Ag</div>
+        <div class="ai-info"><div class="ai-name">AntiGravity</div><div class="ai-maker">AntiGravity AI</div></div>
+        <span class="tier-badge tier-B">B</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('notionai')" id="node-notionai">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#000,#333)">N</div>
+        <div class="ai-info"><div class="ai-name">Notion AI</div><div class="ai-maker">Notion Labs</div></div>
+        <span class="tier-badge tier-A">A</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('glean')" id="node-glean">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#ff4500,#e03d00)">Gl</div>
+        <div class="ai-info"><div class="ai-name">Glean Work AI</div><div class="ai-maker">Glean</div></div>
+        <span class="tier-badge tier-A">A</span>
+      </div>
+    </div>
+    <div class="eco-lane">
+      <div class="eco-lane-title">🚀 Productivity &amp; Vertical AI</div>
+      <div class="ai-node" onclick="showDetail('gamma')" id="node-gamma">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">Γ</div>
+        <div class="ai-info"><div class="ai-name">Gamma</div><div class="ai-maker">Gamma App Inc.</div></div>
+        <span class="tier-badge tier-A">A</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('base44')" id="node-base44">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#f59e0b,#d97706)">B4</div>
+        <div class="ai-info"><div class="ai-name">Base44</div><div class="ai-maker">Base44 (Wix)</div></div>
+        <span class="tier-badge tier-B">B</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('cursor')" id="node-cursor">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">Cu</div>
+        <div class="ai-info"><div class="ai-name">Cursor AI IDE</div><div class="ai-maker">Anysphere</div></div>
+        <span class="tier-badge tier-A">A</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('harvey')" id="node-harvey">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#1e3a5f,#2c5282)">Hv</div>
+        <div class="ai-info"><div class="ai-name">Harvey AI</div><div class="ai-maker">Harvey</div></div>
+        <span class="tier-badge tier-A">A</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('synthesia')" id="node-synthesia">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#e91e63,#c2185b)">Sy</div>
+        <div class="ai-info"><div class="ai-name">Synthesia / Lumen5</div><div class="ai-maker">Various</div></div>
+        <span class="tier-badge tier-B">B</span>
+      </div>
+      <div class="ai-node" onclick="showDetail('salesforce')" id="node-salesforce">
+        <div class="ai-dot" style="background:linear-gradient(135deg,#00a1e0,#0076a8)">SF</div>
+        <div class="ai-info"><div class="ai-name">Salesforce Einstein</div><div class="ai-maker">Salesforce</div></div>
+        <span class="tier-badge tier-A">A</span>
+      </div>
+    </div>
+  </div>
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-top">
+      <div class="detail-icon" id="detailIcon" style="background:linear-gradient(135deg,#6382ff,#9b59b6)">A</div>
+      <div class="detail-meta">
+        <h2 id="detailName">Claude (Opus / Sonnet 4.6)</h2>
+        <p id="detailTagline">Constitutional AI · Safety-first architecture · Long context reasoning</p>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-card"><div class="detail-card-label">Best At</div><div class="detail-card-val" id="detailBest">Analysis, writing, coding, legal drafting, nuanced reasoning</div></div>
+      <div class="detail-card"><div class="detail-card-label">Pricing</div><div class="detail-card-val" id="detailPrice">Pro $20/mo · Team $30/seat · API usage-based</div></div>
+      <div class="detail-card"><div class="detail-card-label">Context Window</div><div class="detail-card-val" id="detailCtx">200K tokens (~150K words)</div></div>
+      <div class="detail-card"><div class="detail-card-label">Inspironics Fit</div><div class="detail-card-val" id="detailFit">⭐⭐⭐⭐⭐ — Primary AI for all knowledge work</div></div>
+    </div>
+    <div class="tag-list" id="detailTags"></div>
+  </div>
+</div>
+
+<!-- SLIDE 1: COMPARISON -->
+<div class="slide" id="slide-1">
+  <div class="slide-header">
+    <h1>Platform Comparison Matrix</h1>
+    <p>Evaluated across dimensions critical for Inspironics Corporation — enterprise use, security, integrations, and ROI</p>
+  </div>
+  <div class="scroll-area">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th style="min-width:140px">Platform</th>
+          <th>Reasoning</th>
+          <th>Code</th>
+          <th>Research</th>
+          <th>Enterprise Sec.</th>
+          <th>Integrations</th>
+          <th>$/Seat/mo</th>
+          <th>Context</th>
+          <th>Multimodal</th>
+          <th>On-Prem</th>
+        </tr>
+      </thead>
+      <tbody id="compBody"></tbody>
+    </table>
+  </div>
+  <div style="margin-top:16px;display:flex;gap:16px;font-size:11px;color:var(--muted)">
+    <span style="color:var(--green)">✓ Full</span>
+    <span style="color:var(--accent4)">◑ Partial</span>
+    <span style="color:var(--red)">✗ N/A</span>
+    <span>· Ratings reflect Q2 2025 capabilities</span>
+  </div>
+</div>
+
+<!-- SLIDE 2: INVESTMENTS -->
+<div class="slide" id="slide-2">
+  <div class="slide-header">
+    <h1>Investment &amp; Backer Landscape</h1>
+    <p>Who funds the AI future — key investors, valuations, and strategic backers as of mid-2025</p>
+  </div>
+  <div class="inv-grid" id="invGrid"></div>
+</div>
+
+<!-- SLIDE 3: ROADMAP -->
+<div class="slide" id="slide-3">
+  <div class="slide-header">
+    <h1>Technology Roadmap — 2024 to 2027</h1>
+    <p>Key milestones, launches, and upcoming capabilities across leading platforms</p>
+  </div>
+  <div class="scroll-area" id="roadmapContainer"></div>
+</div>
+
+<!-- SLIDE 4: INTEGRATIONS -->
+<div class="slide" id="slide-4">
+  <div class="slide-header">
+    <h1>App Integration Ecosystems</h1>
+    <p>Which AI plugs into what — native integrations and API-based connectors for enterprise stacks</p>
+  </div>
+  <div class="int-grid" id="intGrid"></div>
+</div>
+
+<!-- SLIDE 5: FOR INSPIRONICS -->
+<div class="slide" id="slide-5">
+  <div class="slide-header">
+    <h1>AI Recommendations for Inspironics Corporation</h1>
+    <p>Department-by-department playbook — best tools, use cases, and implementation priority</p>
+  </div>
+  <div class="rec-matrix">
+    <div class="rec-sidebar" id="deptSidebar"></div>
+    <div class="rec-main-panel">
+      <div class="rmp-header" id="rmpTitle">Select a department</div>
+      <div class="rmp-sub" id="rmpSub">Click a department on the left to see tailored AI recommendations</div>
+      <div id="rmpTools"></div>
+    </div>
+  </div>
+</div>
+
+<div class="pres-footer">
+  <div class="slide-counter" id="dotNav"></div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="nav-arrow" onclick="prevSlide()">← Prev</button>
+    <span id="slideLabel" style="font-size:11px;color:var(--muted);min-width:50px;text-align:center">1 / 6</span>
+    <button class="nav-arrow" onclick="nextSlide()">Next →</button>
+  </div>
+</div>
+</div>
+
+<script>
+let currentSlide = 0;
+const SLIDES = 6;
+
+const AI_DATA = {
+  claude:{name:'Claude (Opus / Sonnet 4.6)',tagline:'Constitutional AI · Safety-first · 200K context · Leading reasoning',icon:'A',bg:'linear-gradient(135deg,#6382ff,#9b59b6)',best:'Deep analysis, legal/policy drafting, nuanced reasoning, long documents, coding',price:'Pro $20/mo · Team $30/seat/mo · API from $3/M tokens',ctx:'200K tokens (~500 pages)',fit:'⭐⭐⭐⭐⭐ — Primary AI for all knowledge work at Inspironics',tags:['reasoning','writing','coding','safety','long-context','API-first','constitutional-AI']},
+  gpt:{name:'GPT-4o / o3 (OpenAI)',tagline:'Multimodal flagship · DALL-E 3 · Advanced reasoning model o3',icon:'O',bg:'linear-gradient(135deg,#10a37f,#0d7a60)',best:'Multimodal tasks, image analysis, creative content, reasoning puzzles, coding',price:'Plus $20/mo · Team $30/seat · Enterprise custom pricing',ctx:'128K tokens (GPT-4o)',fit:'⭐⭐⭐⭐ — Excellent secondary for creative & multimodal tasks',tags:['multimodal','image-gen','reasoning','plugins','wide-ecosystem','DALL-E']},
+  gemini:{name:'Gemini 2.0 Ultra (Google)',tagline:'Google-native · 1M token context · Deep Workspace integration',icon:'G',bg:'linear-gradient(135deg,#4285f4,#34a853)',best:'Google Workspace automation, multi-step research, long doc summarization',price:'Workspace add-on $30/seat/mo · Ultra $19.99/mo personal',ctx:'1M tokens (Gemini 1.5)',fit:'⭐⭐⭐⭐ — Best for Google Workspace shops',tags:['google-native','1M-context','workspace','search-grounding','multimodal']},
+  grok:{name:'Grok 3 / Aurora (xAI)',tagline:'Real-time X/Twitter data · Unfiltered analysis · Emerging challenger',icon:'X',bg:'linear-gradient(135deg,#1da1f2,#0c7abf)',best:'Real-time social trends, news analysis, brainstorming, research with live data',price:'X Premium+ $16/mo · SuperGrok $30/mo',ctx:'131K tokens',fit:'⭐⭐⭐ — Niche use for social/trend intelligence teams',tags:['real-time','social-data','trending','x-platform','unfiltered']},
+  llama:{name:'Llama 4 Scout / Maverick (Meta)',tagline:'Open weights · Self-hostable · Cost-zero at scale for enterprise',icon:'M',bg:'linear-gradient(135deg,#0866ff,#1877f2)',best:'Self-hosted deployments, fine-tuning on proprietary data, privacy-first use cases',price:'Free (self-host compute costs only)',ctx:'128K tokens',fit:'⭐⭐⭐⭐ — Excellent for Inspironics custom fine-tuning & private deployment',tags:['open-weights','self-host','fine-tunable','private','no-vendor-lock']},
+  mistral:{name:'Mistral Large 2',tagline:'EU-based · GDPR-native · Efficient open-weight models',icon:'Mi',bg:'linear-gradient(135deg,#f04e30,#c0392b)',best:'Coding assistance, structured extraction, EU data-residency requirements',price:'API from €2/M tokens · Le Chat Pro €14.99/mo',ctx:'128K tokens',fit:'⭐⭐⭐ — Good for European compliance scenarios',tags:['GDPR-native','EU-hosted','open-weights','coding','structured-output']},
+  copilot:{name:'Microsoft Copilot 365',tagline:'Embedded in Teams, Word, Excel, Outlook, PowerPoint — enterprise-grade',icon:'Co',bg:'linear-gradient(135deg,#0078d4,#50b5ff)',best:'M365 automation, meeting summaries, Excel analysis, email drafting at scale',price:'$30/seat/mo (requires M365 E3/E5)',ctx:'128K tokens via underlying GPT-4o',fit:'⭐⭐⭐⭐⭐ — Top pick if Inspironics runs Microsoft 365',tags:['M365','Teams','Excel','Word','Outlook','enterprise','SharePoint']},
+  github:{name:'GitHub Copilot',tagline:'AI pair programmer · Code completion · PR summaries · Multi-model',icon:'GH',bg:'linear-gradient(135deg,#24292e,#444)',best:'Code completion, PR review, bug detection, test generation, CI/CD chat',price:'Individual $10/mo · Business $19/seat/mo · Enterprise $39/seat',ctx:'Depends on underlying model',fit:'⭐⭐⭐⭐⭐ — Essential for Inspironics engineering team',tags:['code-completion','PR-review','VS-Code','JetBrains','CI-CD','dev-tools']},
+  perplexity:{name:'Perplexity AI Pro',tagline:'Real-time web research with citations · Anti-hallucination search layer',icon:'Px',bg:'linear-gradient(135deg,#20b2aa,#008b8b)',best:'Fact-checking, competitive research, cited reports, live market data',price:'Pro $20/mo · Enterprise custom',ctx:'32K per query (web-sourced)',fit:'⭐⭐⭐⭐ — Excellent for research & competitive intelligence',tags:['web-search','citations','research','fact-check','real-time-data']},
+  antigravity:{name:'AntiGravity',tagline:'AI workflow automation · Low-code agent builder for teams',icon:'Ag',bg:'linear-gradient(135deg,#8e44ad,#6c3483)',best:'Automated multi-step workflows, connecting AI to internal tools, no-code agents',price:'Startup/Growth tiers — pricing varies',ctx:'Orchestrates across external models',fit:'⭐⭐⭐ — Useful for workflow automation projects at Inspironics',tags:['workflow','no-code','agent-builder','automation','integrations']},
+  notionai:{name:'Notion AI',tagline:'AI embedded in Notion workspace — writing, summarizing, Q&A over docs',icon:'N',bg:'linear-gradient(135deg,#000,#333)',best:'Knowledge base Q&A, meeting notes, wiki drafting, project summaries',price:'+$10/member/mo add-on to Notion',ctx:'Per-page context',fit:'⭐⭐⭐⭐ — Excellent for Inspironics knowledge management',tags:['knowledge-base','wiki','notes','project-mgmt','collaborative']},
+  glean:{name:'Glean Work AI',tagline:'Enterprise search + AI assistant over your entire internal data lake',icon:'Gl',bg:'linear-gradient(135deg,#ff4500,#e03d00)',best:'Internal search across Slack, Drive, JIRA, Confluence, email, HR systems',price:'Enterprise pricing — custom',ctx:'Whole-org indexed knowledge',fit:'⭐⭐⭐⭐ — Strong for org-wide knowledge retrieval at Inspironics',tags:['enterprise-search','semantic-search','Slack','JIRA','Drive','unified-AI']},
+  gamma:{name:'Gamma',tagline:'AI-native presentations, docs, and webpages from a prompt in 30 seconds',icon:'Γ',bg:'linear-gradient(135deg,#7c3aed,#a855f7)',best:'Sales decks, pitch presentations, executive briefs, client proposals fast',price:'Free · Plus $8/mo · Pro $15/mo',ctx:'Prompt-to-slide context',fit:'⭐⭐⭐⭐ — Excellent for Sales, Marketing, Executive comms at Inspironics',tags:['presentations','decks','slides','design','AI-content','fast']},
+  base44:{name:'Base44',tagline:'Prompt-to-app AI builder — build full-stack web apps from natural language',icon:'B4',bg:'linear-gradient(135deg,#f59e0b,#d97706)',best:'Internal tool creation, dashboards, CRUD apps without developers',price:'Free tier · Pro ~$49/mo',ctx:'App-generation context',fit:'⭐⭐⭐ — Good for Inspironics ops/non-dev internal tools',tags:['no-code','app-builder','CRUD','internal-tools','Wix-backed']},
+  cursor:{name:'Cursor AI IDE',tagline:'VS Code fork with deep AI — codebase-aware, multi-file editing, agent mode',icon:'Cu',bg:'linear-gradient(135deg,#06b6d4,#0891b2)',best:'Full codebase context, autonomous coding tasks, refactoring large codebases',price:'Free (hobby) · Pro $20/mo · Business $40/seat/mo',ctx:'200K tokens codebase context',fit:'⭐⭐⭐⭐⭐ — Top pick for Inspironics dev team',tags:['IDE','VS-Code','codebase-aware','agent-mode','refactoring','TypeScript']},
+  harvey:{name:'Harvey AI',tagline:'AI for legal professionals — contract analysis, research, drafting',icon:'Hv',bg:'linear-gradient(135deg,#1e3a5f,#2c5282)',best:'Contract review, legal research, regulatory compliance docs, M&A diligence',price:'Enterprise custom (law firms / in-house teams)',ctx:'Document-level context',fit:'⭐⭐⭐⭐⭐ — Essential for Inspironics legal team',tags:['legal','contract-review','compliance','M&A','litigation-support','law']},
+  synthesia:{name:'Synthesia / Lumen5',tagline:'AI video creation — talking avatar presenters, training videos, ads',icon:'Sy',bg:'linear-gradient(135deg,#e91e63,#c2185b)',best:'Training videos, L&D content, product demos, marketing video at scale',price:'Synthesia Starter $22/mo · Lumen5 Basic $19/mo',ctx:'Script-to-video pipeline',fit:'⭐⭐⭐ — Good for HR training, Marketing content at Inspironics',tags:['video','avatars','training','L&D','marketing','voiceover']},
+  salesforce:{name:'Salesforce Einstein / Agentforce',tagline:'CRM-native AI — lead scoring, forecasting, autonomous sales agents',icon:'SF',bg:'linear-gradient(135deg,#00a1e0,#0076a8)',best:'Sales pipeline AI, customer service bots, marketing personalization at scale',price:'Bundled with Salesforce licenses · Agentforce ~$2/conversation',ctx:'CRM data context',fit:'⭐⭐⭐⭐ — Essential if Inspironics uses Salesforce CRM',tags:['CRM','sales-AI','lead-scoring','forecasting','service-cloud','marketing']}
+};
+
+const COMP_DATA=[
+  {name:'Claude (Anthropic)',reasoning:95,code:88,research:92,security:'✓',integrations:75,price:'$20-30',ctx:'200K',multi:'◑',onprem:'✗'},
+  {name:'GPT-4o (OpenAI)',reasoning:92,code:90,research:88,security:'✓',integrations:95,price:'$20-30',ctx:'128K',multi:'✓',onprem:'◑'},
+  {name:'Gemini 2.0 (Google)',reasoning:88,code:85,research:90,security:'✓',integrations:90,price:'$30',ctx:'1M',multi:'✓',onprem:'◑'},
+  {name:'MS Copilot 365',reasoning:82,code:78,research:80,security:'✓',integrations:98,price:'$30',ctx:'128K',multi:'✓',onprem:'◑'},
+  {name:'GitHub Copilot',reasoning:70,code:97,research:60,security:'✓',integrations:92,price:'$10-39',ctx:'—',multi:'◑',onprem:'◑'},
+  {name:'Cursor AI IDE',reasoning:72,code:95,research:55,security:'◑',integrations:80,price:'$20-40',ctx:'200K',multi:'◑',onprem:'✓'},
+  {name:'Grok 3 (xAI)',reasoning:85,code:82,research:88,security:'◑',integrations:40,price:'$16-30',ctx:'131K',multi:'✓',onprem:'✗'},
+  {name:'Perplexity AI',reasoning:78,code:50,research:96,security:'◑',integrations:55,price:'$20',ctx:'32K',multi:'◑',onprem:'✗'},
+  {name:'Llama 4 (Meta)',reasoning:85,code:88,research:80,security:'✓',integrations:70,price:'Free+infra',ctx:'128K',multi:'◑',onprem:'✓'},
+  {name:'Harvey AI',reasoning:90,code:40,research:88,security:'✓',integrations:60,price:'Custom',ctx:'Doc-level',multi:'◑',onprem:'✓'},
+  {name:'Gamma',reasoning:55,code:30,research:40,security:'◑',integrations:65,price:'$8-15',ctx:'—',multi:'✓',onprem:'✗'},
+  {name:'Salesforce Einstein',reasoning:70,code:35,research:60,security:'✓',integrations:95,price:'Bundled',ctx:'CRM',multi:'◑',onprem:'✓'},
+];
+
+const INV_DATA=[
+  {name:'Anthropic (Claude)',icon:'A',bg:'linear-gradient(135deg,#6382ff,#9b59b6)',valuation:'$61.5B',raised:'$9B+',investors:'Google ($2B), Amazon ($4B), Spark Capital, Index Ventures, Salesforce Ventures',model:'Safety-focused Public Benefit Corp',bar:88,barColor:'#6382ff'},
+  {name:'OpenAI (GPT)',icon:'O',bg:'linear-gradient(135deg,#10a37f,#0d7a60)',valuation:'$157B',raised:'$20B+',investors:'Microsoft ($13B+), Thrive Capital, SoftBank, UAE sovereign wealth fund',model:'Capped-profit → For-profit conversion (2025)',bar:99,barColor:'#10a37f'},
+  {name:'Google DeepMind (Gemini)',icon:'G',bg:'linear-gradient(135deg,#4285f4,#34a853)',valuation:'Alphabet division',raised:'Internal + cloud credit partnerships',investors:'Alphabet / Google (wholly owned)',model:'Integrated product division of Alphabet',bar:100,barColor:'#4285f4'},
+  {name:'xAI (Grok)',icon:'X',bg:'linear-gradient(135deg,#1da1f2,#0c7abf)',valuation:'$50B',raised:'$6B+',investors:'Elon Musk, Vy Capital, a16z, Sequoia, Kingdom Holdings Saudi Arabia',model:'Elon Musk-controlled venture, X platform synergy',bar:72,barColor:'#1da1f2'},
+  {name:'Meta AI (Llama)',icon:'M',bg:'linear-gradient(135deg,#0866ff,#1877f2)',valuation:'Public ($1.3T mkt cap)',raised:'Internal Meta budget ~$65B capex 2025',investors:'Meta Platforms (NASDAQ: META)',model:'Open-source strategy for ecosystem moat',bar:95,barColor:'#0866ff'},
+  {name:'Microsoft (Copilot)',icon:'Co',bg:'linear-gradient(135deg,#0078d4,#50b5ff)',valuation:'Public ($3T mkt cap)',raised:'$13B+ into OpenAI + own R&D',investors:'Public markets; strategic OpenAI partner since 2019',model:'AI-as-Microsoft-Office-upgrade play',bar:100,barColor:'#0078d4'},
+  {name:'Perplexity AI',icon:'Px',bg:'linear-gradient(135deg,#20b2aa,#008b8b)',valuation:'$9B',raised:'$500M+',investors:'NVIDIA, Jeff Bezos, IVP, NEA, Institutional Venture Partners',model:'Search-as-AI answer engine, subscription + API',bar:45,barColor:'#20b2aa'},
+  {name:'Mistral AI',icon:'Mi',bg:'linear-gradient(135deg,#f04e30,#c0392b)',valuation:'€6B',raised:'€1.1B',investors:'a16z, Lightspeed, BNP Paribas, Salesforce, NVIDIA, General Catalyst',model:'EU sovereign AI champion + open source',bar:38,barColor:'#f04e30'},
+];
+
+const ROADMAP_DATA=[
+  {name:'Claude (Anthropic)',icon:'A',color:'#6382ff',items:[
+    {date:'2024 Q1',label:'Claude 3 (Haiku/Sonnet/Opus) — state-of-art benchmark sweep',cls:'rm-node-past'},
+    {date:'2024 Q4',label:'Claude 3.5 Sonnet refresh, extended thinking, computer use beta',cls:'rm-node-past'},
+    {date:'2025 Q1',label:'Claude 3.7 Sonnet, computer use GA, Projects feature',cls:'rm-node-past'},
+    {date:'2025 Q2',label:'Claude 4.6 Sonnet/Opus, 200K+ context, improved coding',cls:'rm-node-current'},
+    {date:'2025 Q4',label:'Multimodal agents, deeper tool use, enterprise compliance layer',cls:'rm-node-future'},
+    {date:'2026+',label:'Constitutional AI v2, on-device models, Anthropic Cloud services',cls:'rm-node-future'},
+  ]},
+  {name:'OpenAI (GPT / o-series)',icon:'O',color:'#10a37f',items:[
+    {date:'2024 Q1',label:'GPT-4 Turbo, DALL-E 3 in ChatGPT, GPT store launch',cls:'rm-node-past'},
+    {date:'2024 Q3',label:'GPT-4o multimodal flagship, real-time voice mode',cls:'rm-node-past'},
+    {date:'2025 Q1',label:'o3 reasoning model, Operator browser agents',cls:'rm-node-past'},
+    {date:'2025 Q2',label:'GPT-5 (rumored), for-profit corporate structure conversion',cls:'rm-node-current'},
+    {date:'2025 Q4',label:'Autonomous agents, full computer control, persistent memory AI',cls:'rm-node-future'},
+    {date:'2026+',label:'AGI milestone pursuit, robotics integration, reasoning OS',cls:'rm-node-future'},
+  ]},
+  {name:'Google Gemini',icon:'G',color:'#4285f4',items:[
+    {date:'2024 Q1',label:'Gemini 1.0 Ultra launch, 1M context window world record',cls:'rm-node-past'},
+    {date:'2024 Q3',label:'Gemini 1.5 Pro/Flash, NotebookLM with audio summaries',cls:'rm-node-past'},
+    {date:'2025 Q1',label:'Gemini 2.0 Flash, Deep Research, Project Astra preview',cls:'rm-node-past'},
+    {date:'2025 Q2',label:'Gemini 2.5 Pro, full Workspace integration across all apps',cls:'rm-node-current'},
+    {date:'2025 Q4',label:'Native agent in Android, Search AI Overviews v2 rollout',cls:'rm-node-future'},
+    {date:'2026+',label:'Gemini 3, universal AI across all Google/Android surfaces',cls:'rm-node-future'},
+  ]},
+  {name:'Microsoft Copilot 365',icon:'Co',color:'#0078d4',items:[
+    {date:'2024 Q1',label:'Copilot for M365 GA, Teams Premium AI features',cls:'rm-node-past'},
+    {date:'2024 Q3',label:'Copilot Studio, Wave 2 features, SharePoint Copilot',cls:'rm-node-past'},
+    {date:'2025 Q1',label:'Copilot agents, Planner AI, Loop AI collaboration',cls:'rm-node-past'},
+    {date:'2025 Q2',label:'Copilot for Finance, HR Copilot expansion across departments',cls:'rm-node-current'},
+    {date:'2025 Q4',label:'Multi-agent orchestration, on-device Phi-3 edge models',cls:'rm-node-future'},
+    {date:'2026+',label:'Full Office autonomous agents, AI-native Teams platform',cls:'rm-node-future'},
+  ]},
+  {name:'GitHub Copilot',icon:'GH',color:'#555',items:[
+    {date:'2024 Q1',label:'Copilot Chat GA, PR summarization, code review AI',cls:'rm-node-past'},
+    {date:'2024 Q3',label:'Copilot Workspace preview, multi-model backend choice',cls:'rm-node-past'},
+    {date:'2025 Q1',label:'Agent mode, Claude + Gemini as selectable backends',cls:'rm-node-past'},
+    {date:'2025 Q2',label:'Copilot Extensions marketplace, SWE-agent autonomous tasks',cls:'rm-node-current'},
+    {date:'2025 Q4',label:'Full-repo autonomous refactoring, AI security scanning',cls:'rm-node-future'},
+    {date:'2026+',label:'AI-as-developer, full autonomous PR generation end-to-end',cls:'rm-node-future'},
+  ]},
+];
+
+const INT_DATA=[
+  {name:'Claude (Anthropic)',icon:'A',bg:'linear-gradient(135deg,#6382ff,#9b59b6)',apps:[['Slack','key'],['Notion','native'],['Zapier','native'],['Make (Integromat)','native'],['Google Workspace','key'],['VS Code','key'],['GitHub Copilot','native'],['Salesforce','native'],['HubSpot',''],['Jira',''],['Confluence','native'],['Linear',''],['Airtable',''],['Claude API / SDK','key']]},
+  {name:'Microsoft Copilot 365',icon:'Co',bg:'linear-gradient(135deg,#0078d4,#50b5ff)',apps:[['Word','native'],['Excel','native'],['PowerPoint','native'],['Outlook','native'],['Teams','native'],['SharePoint','native'],['OneDrive','native'],['Dynamics 365','native'],['Power BI','native'],['Power Automate','native'],['Azure','key'],['Copilot Studio','native']]},
+  {name:'GitHub Copilot',icon:'GH',bg:'linear-gradient(135deg,#24292e,#444)',apps:[['VS Code','native'],['JetBrains IDEs','native'],['Neovim','native'],['GitHub.com','native'],['GitHub Actions','native'],['Azure DevOps','key'],['Jira',''],['Slack',''],['Claude backend','native'],['GPT-4o backend','native'],['Gemini backend','native']]},
+  {name:'Gemini (Google)',icon:'G',bg:'linear-gradient(135deg,#4285f4,#34a853)',apps:[['Google Docs','native'],['Gmail','native'],['Google Sheets','native'],['Google Slides','native'],['Google Meet','native'],['Google Drive','native'],['YouTube','native'],['Chrome browser','native'],['Android','native'],['NotebookLM','native'],['AppSheet','native'],['Looker','key']]},
+  {name:'Perplexity AI',icon:'Px',bg:'linear-gradient(135deg,#20b2aa,#008b8b)',apps:[['Slack (pages)',''],['Raycast','native'],['Arc Browser','native'],['API integrations','key'],['iOS Shortcuts',''],['Android Widgets','']]},
+  {name:'Gamma',icon:'Γ',bg:'linear-gradient(135deg,#7c3aed,#a855f7)',apps:[['Google Slides import','native'],['PowerPoint export','native'],['Canva-style assets','native'],['Unsplash images','native'],['Giphy','native'],['Custom brand fonts',''],['Embed anywhere','native'],['PDF export','native']]},
+];
+
+const DEPT_DATA={
+  'Research & Analytics':{icon:'🔬',sub:'Competitive intelligence, market research, data synthesis',tools:[
+    {rank:1,cls:'rank-1',name:'Perplexity AI Pro',why:'Real-time cited research, auto-summarizes web sources, anti-hallucination by design',tags:['web-search','citations','real-time']},
+    {rank:2,cls:'rank-2',name:'Claude (Sonnet)',why:'Deep document analysis, 200K context, synthesize reports and briefings from uploaded files',tags:['analysis','long-doc','reasoning']},
+    {rank:3,cls:'rank-3',name:'NotebookLM (Google)',why:'Upload PDFs/reports, generate source-grounded audio & Q&A summaries',tags:['document-qa','audio','grounded']},
+  ]},
+  'Engineering / Dev':{icon:'⚙',sub:'Code generation, review, architecture, testing',tools:[
+    {rank:1,cls:'rank-1',name:'Cursor AI IDE',why:'Full codebase context, autonomous agent mode, multi-file editing — best-in-class DX',tags:['IDE','agent','codebase-aware']},
+    {rank:2,cls:'rank-2',name:'GitHub Copilot',why:'PR summaries, inline completions across all IDEs, CI/CD chat integration',tags:['inline-code','PR-review','CI-CD']},
+    {rank:3,cls:'rank-3',name:'Claude API (direct)',why:'Architecture design, system design docs, complex debugging with long context',tags:['architecture','debugging','long-context']},
+  ]},
+  'Legal & Compliance':{icon:'⚖',sub:'Contract review, regulatory research, drafting',tools:[
+    {rank:1,cls:'rank-1',name:'Harvey AI',why:'Purpose-built for legal — contract analysis, regulatory memos, M&A diligence',tags:['contracts','compliance','M&A']},
+    {rank:2,cls:'rank-2',name:'Claude (Opus)',why:'Review complex contracts, identify risk clauses, draft compliance policies with nuance',tags:['drafting','risk-analysis','compliance']},
+    {rank:3,cls:'rank-3',name:'Perplexity AI',why:'Real-time regulatory lookups, case law search with citations',tags:['regulatory','case-law','citations']},
+  ]},
+  'Finance':{icon:'💹',sub:'Financial modeling, reporting, forecasting, analysis',tools:[
+    {rank:1,cls:'rank-1',name:'MS Copilot 365 (Excel)',why:'Native AI in Excel — formula generation, data analysis, chart narration, financial modeling',tags:['Excel','formulas','data-analysis']},
+    {rank:2,cls:'rank-2',name:'Claude (Sonnet)',why:'Earnings call analysis, financial report summarization, scenario modeling narratives',tags:['analysis','reports','scenarios']},
+    {rank:3,cls:'rank-3',name:'Salesforce Einstein Analytics',why:'Revenue forecasting, pipeline AI, CFO dashboards if on Salesforce',tags:['forecasting','CRM','dashboards']},
+  ]},
+  'Sales & BD':{icon:'📈',sub:'Prospecting, proposals, deal intelligence, outreach',tools:[
+    {rank:1,cls:'rank-1',name:'Salesforce Agentforce',why:'AI SDR, lead scoring, account intelligence, autonomous outreach if on Salesforce',tags:['CRM','lead-scoring','automation']},
+    {rank:2,cls:'rank-2',name:'Gamma + Claude',why:'Generate polished pitch decks in minutes; personalized proposals via Claude research',tags:['decks','personalization','research']},
+    {rank:3,cls:'rank-3',name:'Grok / Perplexity',why:'Real-time prospect news, competitor tracking, social signals before calls',tags:['prospect-intel','real-time','competitive']},
+  ]},
+  'Marketing':{icon:'📣',sub:'Content creation, campaigns, brand voice, SEO',tools:[
+    {rank:1,cls:'rank-1',name:'Claude (Sonnet)',why:'Long-form content, brand-consistent copy, campaign strategies, SEO-optimized articles',tags:['content','copywriting','strategy']},
+    {rank:2,cls:'rank-2',name:'Gamma',why:'Campaign decks, social content layouts, one-pagers from prompts in minutes',tags:['design','decks','fast-content']},
+    {rank:3,cls:'rank-3',name:'GPT-4o + DALL-E 3',why:'Multimodal image generation for visual assets, social media, ad creative',tags:['image-gen','visual','social-media']},
+  ]},
+  'HR & People Ops':{icon:'👥',sub:'Recruiting, onboarding, policies, L&D, engagement',tools:[
+    {rank:1,cls:'rank-1',name:'MS Copilot 365',why:'HR policy drafting in Word, interview scheduling via Outlook, Teams meeting notes',tags:['M365','policies','scheduling']},
+    {rank:2,cls:'rank-2',name:'Synthesia',why:'Onboarding training videos, L&D modules, compliance training without video production costs',tags:['video','training','L&D']},
+    {rank:3,cls:'rank-3',name:'Claude (Sonnet)',why:'Job description writing, structured interview frameworks, sensitive HR document drafting',tags:['JDs','interviews','policy']},
+  ]},
+  'Operations':{icon:'🔧',sub:'Process automation, documentation, vendor management',tools:[
+    {rank:1,cls:'rank-1',name:'MS Copilot (Power Automate)',why:'End-to-end workflow automation, RPA with AI, connecting 900+ business systems',tags:['automation','RPA','integration']},
+    {rank:2,cls:'rank-2',name:'Glean Work AI',why:'Universal semantic search across all Inspironics data — Slack, Drive, JIRA, email',tags:['search','unified-knowledge','cross-tool']},
+    {rank:3,cls:'rank-3',name:'Base44',why:'Build internal ops dashboards and tools without developers, powered by AI',tags:['no-code','internal-tools','dashboards']},
+  ]},
+  'Executive / Strategy':{icon:'🎯',sub:'Briefings, decision support, board materials, strategic analysis',tools:[
+    {rank:1,cls:'rank-1',name:'Claude (Opus)',why:'Deep strategic analysis, scenario planning, board-quality executive briefs, competitive landscape reports',tags:['strategy','analysis','executive']},
+    {rank:2,cls:'rank-2',name:'Perplexity AI',why:'Real-time market intelligence, cited strategic briefs, M&A target research',tags:['intelligence','M&A','real-time']},
+    {rank:3,cls:'rank-3',name:'Gamma',why:'Board presentation creation, investor decks, strategy one-pagers in professional design',tags:['board-decks','investor-relations','design']},
+  ]},
+};
+
+function renderComp(){
+  const tb=document.getElementById('compBody');
+  tb.innerHTML=COMP_DATA.map(r=>`<tr>
+    <td style="font-weight:500">${r.name}</td>
+    <td><div class="score-bar"><div class="score-fill" style="width:${r.reasoning*0.6}px"></div><span class="score-num">${r.reasoning}</span></div></td>
+    <td><div class="score-bar"><div class="score-fill" style="width:${r.code*0.6}px;background:var(--accent2)"></div><span class="score-num">${r.code}</span></div></td>
+    <td><div class="score-bar"><div class="score-fill" style="width:${r.research*0.6}px;background:var(--accent3)"></div><span class="score-num">${r.research}</span></div></td>
+    <td style="color:${r.security==='✓'?'var(--green)':r.security==='◑'?'var(--accent4)':'var(--red)'}">${r.security}</td>
+    <td><div class="score-bar"><div class="score-fill" style="width:${r.integrations*0.45}px;background:var(--accent4)"></div><span class="score-num">${r.integrations}</span></div></td>
+    <td style="color:var(--accent2);font-size:11px">${r.price}</td>
+    <td style="font-size:11px;color:var(--muted)">${r.ctx}</td>
+    <td style="color:${r.multi==='✓'?'var(--green)':r.multi==='◑'?'var(--accent4)':'var(--red)'}">${r.multi}</td>
+    <td style="color:${r.onprem==='✓'?'var(--green)':r.onprem==='◑'?'var(--accent4)':'var(--red)'}">${r.onprem}</td>
+  </tr>`).join('');
+}
+
+function renderInv(){
+  document.getElementById('invGrid').innerHTML=INV_DATA.map(d=>`
+    <div class="inv-card">
+      <div class="inv-header">
+        <div class="inv-logo" style="background:${d.bg}">${d.icon}</div>
+        <div><div class="inv-ai-name">${d.name}</div><div class="inv-valuation">${d.valuation}</div></div>
+      </div>
+      <div class="inv-body">
+        <div class="inv-row"><span class="inv-label">Total Raised</span><span class="inv-val">${d.raised}</span></div>
+        <div class="inv-row"><span class="inv-label">Key Investors</span><span class="inv-val" style="font-size:11px;color:var(--muted)">${d.investors}</span></div>
+        <div class="inv-row"><span class="inv-label">Business Model</span><span class="inv-val" style="font-size:11px">${d.model}</span></div>
+        <div class="funding-bar"><div class="funding-fill" style="width:${d.bar}%;background:${d.barColor}"></div></div>
+      </div>
+    </div>`).join('');
+}
+
+function renderRoadmap(){
+  document.getElementById('roadmapContainer').innerHTML=ROADMAP_DATA.map(r=>`
+    <div class="roadmap-track">
+      <div class="roadmap-ai-name">
+        <span style="width:22px;height:22px;border-radius:6px;background:${r.color};display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">${r.icon}</span>
+        ${r.name}
+      </div>
+      <div class="roadmap-timeline">
+        ${r.items.map(m=>`<div class="roadmap-node ${m.cls}"><div class="rm-date">${m.date}</div><div class="rm-event">${m.label}</div></div>`).join('')}
+      </div>
+    </div><div class="section-divider"></div>`).join('');
+}
+
+function renderInt(){
+  document.getElementById('intGrid').innerHTML=INT_DATA.map(d=>`
+    <div class="int-card">
+      <div class="int-ai-name">
+        <span style="width:26px;height:26px;border-radius:6px;background:${d.bg};display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">${d.icon}</span>
+        ${d.name}
+      </div>
+      <div class="int-apps">${d.apps.map(a=>`<span class="int-app ${a[1]==='native'?'native':a[1]==='key'?'key':''}">${a[0]}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+let activeDept=null;
+function renderDepts(){
+  document.getElementById('deptSidebar').innerHTML=Object.keys(DEPT_DATA).map(d=>
+    `<div class="rec-dept-btn ${d===activeDept?'active':''}" onclick="showDept('${d}')">${DEPT_DATA[d].icon} ${d}</div>`
+  ).join('');
+}
+
+function showDept(name){
+  activeDept=name;
+  const d=DEPT_DATA[name];
+  document.getElementById('rmpTitle').textContent=name;
+  document.getElementById('rmpSub').textContent=d.sub;
+  document.getElementById('rmpTools').innerHTML=d.tools.map(t=>`
+    <div class="rmp-tool">
+      <div class="rmp-rank-badge ${t.cls}">${t.rank}</div>
+      <div class="rmp-tool-info">
+        <h4>${t.name}</h4>
+        <p>${t.why}</p>
+        <div class="rmp-use-tags">${t.tags.map(tg=>`<span class="tag">${tg}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+  renderDepts();
+}
+
+function showDetail(key){
+  document.querySelectorAll('.ai-node').forEach(n=>n.classList.remove('active'));
+  const nd=document.getElementById('node-'+key);
+  if(nd)nd.classList.add('active');
+  const d=AI_DATA[key];if(!d)return;
+  document.getElementById('detailIcon').style.background=d.bg;
+  document.getElementById('detailIcon').textContent=d.icon;
+  document.getElementById('detailName').textContent=d.name;
+  document.getElementById('detailTagline').textContent=d.tagline;
+  document.getElementById('detailBest').textContent=d.best;
+  document.getElementById('detailPrice').textContent=d.price;
+  document.getElementById('detailCtx').textContent=d.ctx;
+  document.getElementById('detailFit').textContent=d.fit;
+  document.getElementById('detailTags').innerHTML=d.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+}
+
+function goSlide(n){
+  document.querySelectorAll('.slide').forEach((s,i)=>s.classList.toggle('active',i===n));
+  document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',i===n));
+  document.querySelectorAll('.dot-nav').forEach((d,i)=>d.classList.toggle('active',i===n));
+  document.getElementById('slideLabel').textContent=`${n+1} / ${SLIDES}`;
+  currentSlide=n;
+}
+function nextSlide(){goSlide((currentSlide+1)%SLIDES);}
+function prevSlide(){goSlide((currentSlide-1+SLIDES)%SLIDES);}
+
+// Build dot nav
+document.getElementById('dotNav').innerHTML=
+  Array.from({length:SLIDES},(_,i)=>`<div class="dot-nav ${i===0?'active':''}" onclick="goSlide(${i})"></div>`).join('');
+
+renderComp();renderInv();renderRoadmap();renderInt();renderDepts();
+showDetail('claude');
+showDept(Object.keys(DEPT_DATA)[0]);
+</script>
+</body>
+</html>
